@@ -271,7 +271,9 @@ Simulation reveals which local mechanisms produce structures statistically indis
 This framework connects to several established research traditions.
 
 ### Emergent collective behavior
-The principle that simple local rules generate large-scale spatial structure was demonstrated by **Thomas C. Schelling** in *Dynamic Models of Segregation* (1971) and *Micromotives and Macrobehavior* (1978). Sequential Shape Fields extends the same logic from residential segregation to **geometric artifacts**: local decision rules → sequential spatial updates → emergent collective structure.
+The principle that simple local rules generate large-scale spatial structure was demonstrated by **Thomas C. Schelling** in [*Dynamic Models of Segregation* (1971)](https://acoustique.ec-lyon.fr/chaos/Schelling71.pdf) and [*Micromotives and Macrobehavior* (1978)](https://openlibrary.org/books/OL4729113M/Micromotives_and_macrobehavior). 
+
+In Schelling’s model, individual agents follow minimal neighborhood preferences, yet global segregation patterns emerge (see [Schelling’s model of segregation on Wikipedia](https://en.wikipedia.org/wiki/Schelling%27s_model_of_segregation)). Sequential Shape Fields extends the same logic from residential segregation to **geometric artifacts**: local decision rules → sequential spatial updates → emergent collective structure.
 
 ### Spatial statistics
 The shared-field representation is a **marked spatial point process**, a core model in spatial statistics.
