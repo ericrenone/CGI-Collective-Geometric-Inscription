@@ -1,344 +1,378 @@
-# Sequential Shape Fields
+# Collective Geometric Inscription
+## A Marked Spatial Point Process Framework for Emergent Artifact Formation
 
-## A Markov Field Framework for Collective Geometric Interaction
-
-> Minimal instructions can generate complex collective structure.
-
-This framework studies how strangers sequentially construct spatial patterns on a shared surface under extremely simple rules.
-
-The project begins with a single minimal instruction:
-
-> **Choose one shape and add it anywhere on the paper.**
-
-Each participant adds exactly one shape from a predefined set. Over time the surface accumulates structure. The resulting artifact is modeled as a **sequential stochastic spatial process**.
-
-The central scientific objective is to infer the **local update rule** that governs participant actions. Formally, the goal is to estimate the **transition kernel**
-
-\[
-K((q,\ell) \mid X_t)
-\]
-
-which gives the probability that a participant selects shape category \(q\) and placement location \(\ell\) given the current field state \(X_t\).
+> Uncoordinated participants, acting under a single minimal instruction,  
+> generate collective spatial structure through sequential geometric decisions.  
+> This framework infers the implicit rule governing those decisions.
 
 ---
 
-## Conceptual Overview
+## Overview
 
-A participant receives the instruction, observes the current field, and produces a geometric action. This action updates the system state:
+The experiment begins with one instruction:
 
-\[
-X_t \rightarrow X_{t+1}
-\]
+> **Choose one shape and place it on the shared surface.**
 
-where  
-- \(X_t\) is the system state before the action,  
-- \(X_{t+1}\) is the system state after the action.
+Each participant arrives, observes a surface accumulating geometric marks, adds one shape, and leaves. No participant communicates with another. There is no shared goal. There is no coordination mechanism — except the artifact itself.
 
-For isolated prompts, responses are independent emissions. In the shared-paper experiment, actions accumulate sequentially:
+Over time, the surface fills. Structure appears.
 
-\[
-X_0 \rightarrow X_1 \rightarrow X_2 \rightarrow \dots \rightarrow X_n
-\]
+The question is: **what rule produced it?**
 
-Each participant observes the existing field and updates it. The artifact therefore evolves as a **sequential stochastic process over spatial structure**.
+This framework models the evolving artifact as a **sequential marked spatial point process** and treats participant decisions as draws from a **field-conditioned probability measure**. The scientific objective is to recover the **conditional intensity function** that governs how participants select shape type and placement location given the configuration they observe.
 
 ---
 
-## Experimental Grammar
+## Formal Setup
 
-The experimental progression systematically introduces new latent variables, expanding the state space of possible responses stage by stage.
+### Spatial Domain
 
-### Level 1 — Single-form generation
-Participants generate a single geometric object.  
-**Examples:** draw a line, draw a circle, draw a square, draw a triangle.  
-**Purpose:** Estimate single-form emission distributions.
+Let
 
-### Level 2 — Same-form relation
-Participants generate two objects of the same class.  
-**Examples:** two circles, two squares, two triangles.  
-**Purpose:** Estimate relational geometry distributions.
+$$\mathcal{S} = [0, W] \times [0, H] \subset \mathbb{R}^2$$
 
-### Level 3 — Cross-form relation
-Participants integrate objects of different geometric classes.  
-**Examples:** circle + square, circle + triangle, square + triangle.  
-**Purpose:** Measure heterogeneous object integration strategies.
+denote the bounded planar domain — the physical surface on which participants act.
 
-### Level 4 — Choice without production
-Participants no longer draw shapes. Instead they choose from a predefined **shape bank** (circle, square, triangle).  
-**Instruction:** “Choose one shape and add it to the paper.”  
-**Purpose:** Isolate categorical selection and spatial placement decisions. Motor-production noise is eliminated.
+### Mark Space
 
-### Level 5 — Collective sequential field
-Participants interact with the **same evolving sheet**.  
-**Instruction:** “Each participant adds exactly one shape to the shared paper.”  
-**Purpose:** Observe emergent collective field dynamics.
+Let
 
----
+$$\mathcal{Q} = \{\,\circ,\; \square,\; \triangle\,\}$$
 
-## Baseline Shape Production
+denote the finite categorical mark space — the set of available shape types.
 
-### Circle emission model
-A circle is represented as
-\[
-s = (x,y,r,c,p,v,\theta,\epsilon)
-\]
-where
+### Configuration Space
 
-| Parameter | Description                  |
-|-----------|------------------------------|
-| \(x,y\)   | center location              |
-| \(r\)     | radius                       |
-| \(c\)     | closure completeness         |
-| \(p\)     | pen pressure                 |
-| \(v\)     | drawing velocity             |
-| \(\theta\)| starting angle               |
-| \(\epsilon\)| deviation from ideal circle |
+A **marked configuration** is a finite set of located, typed events:
 
-Emission model: \(s \sim P_{\text{circle}}(\cdot)\).  
-Measured tendencies include center bias, radius distribution, closure variability, and motor execution variance.
+$$X = \{(q_i, \ell_i)\}_{i=1}^{n} \;\in\; \mathcal{N}_f(\mathcal{S} \times \mathcal{Q})$$
 
-### Square emission model
-Squares introduce polygonal construction (vertex planning, orthogonal edges, angular closure, rotation relative to page axes).  
-Emission model: \(s \sim P_{\text{square}}(\cdot)\).  
-Typical parameters: side length, orientation, orthogonality error.
+where $\mathcal{N}_f(\mathcal{S} \times \mathcal{Q})$ is the space of finite marked point configurations over $\mathcal{S} \times \mathcal{Q}$.
 
-### Triangle emission model
-Triangles represent the minimal polygon class.  
-Emission model: \(s \sim P_{\text{triangle}}(\cdot)\).  
-Parameters include centroid location, scale, orientation, and apex direction. Triangles often reveal stability and directional biases.
+### The Construction Process
+
+The artifact evolves as a **strictly additive sequential process**:
+
+$$X_0 = \emptyset \qquad X_{t+1} = X_t \cup \{(q_{t+1},\, \ell_{t+1})\}$$
+
+Each participant contributes exactly one event. The configuration at time $n$ encodes the complete history of $n$ sequential decisions. No element is ever removed or relocated. The process is irreversible.
 
 ---
 
-## Relational Geometry
+## Markov Structure
 
-### Same-shape relations
-Relational distributions are estimated as
+Participants observe only the current visible field. They have no knowledge of the identity, sequence, or reasoning of prior participants — only the geometric configuration left on the surface.
 
-\[
-P(R \mid \text{circle-circle}),\quad
-P(R \mid \text{square-square}),\quad
-P(R \mid \text{triangle-triangle})
-\]
+This motivates the **first-order Markov assumption**:
 
-with relation vector
+$$P(X_{t+1} \mid X_0, X_1, \dots, X_t) \;=\; P(X_{t+1} \mid X_t)$$
 
-\[
-R = (d,\Delta r,o,t,n,a,\sigma)
-\]
+**Justification.** The field $X_t$ is a complete spatial record of all prior actions. A participant reading the surface recovers — through perceived geometry — the aggregate signal of every preceding decision: density patterns, clustering, symmetry, empty regions, dominant shape types. The current configuration is therefore the natural sufficient statistic for predicting the next action.
 
-| Parameter | Meaning                  |
-|-----------|--------------------------|
-| \(d\)     | center distance          |
-| \(\Delta r\)| size difference        |
-| \(o\)     | overlap                  |
-| \(t\)     | tangency                 |
-| \(n\)     | nesting                  |
-| \(a\)     | alignment                |
-| \(\sigma\)| symmetry                |
-
-### Mixed-shape relations
-Tasks combine different classes (e.g., square + circle).  
-Response representation: \(s = (s_A, s_B, R, O)\), where \(O\) encodes order and role structure.  
-Measured features include containment, scale dominance, and anchor–satellite relationships.
+Under this assumption, the construction process defines a **discrete-time Markov chain** on $\mathcal{N}_f(\mathcal{S} \times \mathcal{Q})$, with transition determined by participant behavior.
 
 ---
 
-## Shape Bank Simplification
+## The Conditional Intensity Function
 
-To isolate categorical choice and placement, the experiment uses a fixed shape bank:
+Given field state $X_t$, a participant selects action $(q, \ell)$ according to a normalized density over $\mathcal{Q} \times \mathcal{S}$:
 
-- Circle
-- Square
-- Triangle
+$$P(q, \ell \mid X_t)\, d\ell \;=\; \frac{\lambda(q, \ell \mid X_t)}{\mathcal{Z}(X_t)}\, d\ell$$
 
-**Instruction:** “Choose one shape and add it to the paper.”
+where the **partition function** normalizes over all possible actions:
 
-Each action is recorded as
-\[
-a_t = (q_t, \ell_t)
-\]
+$$\mathcal{Z}(X_t) \;=\; \sum_{q' \in \mathcal{Q}} \int_{\mathcal{S}} \lambda(q', \ell' \mid X_t)\, d\ell'$$
 
-| Variable | Meaning             |
-|----------|---------------------|
-| \(q_t\)  | shape category      |
-| \(\ell_t\)| spatial location   |
+The function $\lambda : \mathcal{Q} \times \mathcal{S} \times \mathcal{N}_f \rightarrow \mathbb{R}_{+}$ is the **conditional intensity** — the fundamental object of inference.
 
-Motor-production noise is removed.
+Recovering $\lambda$ from observed trajectories is equivalent to identifying the behavioral rule by which participants read and respond to the field.
 
 ---
 
-## Field State Representation
+## Energy-Based Representation
 
-The field configuration at time \(t\) is
+The conditional intensity admits a **Gibbs energy representation**:
 
-\[
-X_t = \{(q_1,\ell_1),\ (q_2,\ell_2),\ \dots,\ (q_t,\ell_t)\}
-\]
+$$\lambda(q, \ell \mid X_t) \;=\; \exp\!\bigl(-\,\mathcal{H}(q, \ell;\, X_t)\bigr)$$
 
-Each participant observes \(X_t\) and performs the update
-\[
-X_{t+1} = X_t \cup \{(q_{t+1},\ell_{t+1})\}.
-\]
+where $\mathcal{H}$ is a **local interaction energy** measuring the compatibility of placing shape $q$ at location $\ell$ given the current configuration $X_t$.
 
-This produces a **sequential spatial process**.
+This formulation follows directly from the theory of Gibbs–Markov spatial processes established by Besag (1974): local conditional probability specifications that satisfy positivity and Markov conditions uniquely determine a globally consistent probability distribution over spatial configurations. The energy function encodes all interaction structure.
 
----
+High $\mathcal{H}$ → low probability of that action.  
+Low $\mathcal{H}$ → high probability of that action.
 
-## Markov Field Assumption
-
-The update process is modeled as
-
-\[
-P(X_{t+1} \mid X_t, X_{t-1}, \dots) \approx P(X_{t+1} \mid X_t).
-\]
-
-Participant decisions depend only on the current visible configuration (which implicitly encodes prior history).
+The energy formulation separates **what is measured** (spatial features of the configuration) from **how those measurements combine** (the parameter weights).
 
 ---
 
-## Transition Kernel
+## Energy Decomposition
 
-The fundamental object of inference is the transition kernel
+The interaction energy decomposes into a weighted sum of spatial feature functions:
 
-\[
-(q_{t+1},\ell_{t+1}) \sim K(\cdot \mid X_t).
-\]
+$$\mathcal{H}(q, \ell;\, X_t) \;=\; \sum_{k=1}^{K} \beta_k\, f_k(q, \ell;\, X_t)$$
 
-This kernel fully specifies how participants select shape category \(q\) and spatial placement \(\ell\) given the existing field.
+Parameters $\boldsymbol{\beta} = (\beta_1, \dots, \beta_K)$ are estimated from observed action sequences. Each $\beta_k$ quantifies the strength and direction of the corresponding behavioral tendency.
+
+### Feature Functions
+
+**Density interaction** — attraction or inhibition toward occupied regions:
+
+$$f_{\text{density}}(q, \ell;\, X_t) \;=\; -\log\!\left(1 + \sum_{(q_j, \ell_j) \in X_t} \kappa_h(\|\ell - \ell_j\|)\right)$$
+
+where $\kappa_h$ is an isotropic kernel with bandwidth $h$. Negative $\beta_{\text{density}}$ encodes clustering; positive encodes inhibition.
+
+**Mark interaction** — categorical homophily or heterophily:
+
+$$f_{\text{match}}(q, \ell;\, X_t) \;=\; \sum_{(q_j, \ell_j) \in X_t} \mathbf{1}[q = q_j]\cdot \kappa_h(\|\ell - \ell_j\|)$$
+
+Negative $\beta_{\text{match}}$ draws same-type shapes together; positive disperses them.
+
+**Symmetry gain** — preference for configurations with greater bilateral balance:
+
+$$f_{\text{symmetry}}(q, \ell;\, X_t) \;=\; \Sigma\!\bigl(X_t \cup \{(q,\ell)\}\bigr) - \Sigma(X_t)$$
+
+where $\Sigma(\cdot)$ is a bilateral symmetry functional over $\mathcal{S}$. Negative $\beta_{\text{symmetry}}$ encodes a tendency to complete perceived symmetry axes.
+
+**Void attraction** — preference for spatially unoccupied regions:
+
+$$f_{\text{void}}(\ell;\, X_t) \;=\; V(\ell;\, X_t)$$
+
+where $V(\ell; X_t)$ is the area of the Voronoi cell containing $\ell$ under the configuration $X_t$. Negative $\beta_{\text{void}}$ encodes space-filling behavior.
+
+**Boundary interaction** — avoidance or anchoring to the domain edge:
+
+$$f_{\text{edge}}(\ell) \;=\; d(\ell,\, \partial\mathcal{S})$$
+
+where $d(\ell, \partial\mathcal{S})$ is Euclidean distance from the boundary. Positive $\beta_{\text{edge}}$ encodes interior preference; negative encodes boundary anchoring.
+
+**Scale coherence** — local size matching:
+
+$$f_{\text{scale}}(q, \ell;\, X_t) \;=\; \sum_{(q_j, \ell_j) \in X_t} \bigl|r - r_j\bigr| \cdot \kappa_h(\|\ell - \ell_j\|)$$
+
+where $r$ and $r_j$ are the characteristic scales of placed shapes.
 
 ---
 
-## Conditional Intensity Model
+## Mark-Induced Spatial Anisotropy
 
-A flexible parametric form for the kernel is the conditional intensity
+A structural distinction between this framework and standard marked point processes is that the marks carry **intrinsic geometry**.
 
-\[
-P(q,\ell \mid X_t) \propto \exp\bigl(
-\beta_1 f_{\text{density}} +
-\beta_2 f_{\text{symmetry}} +
-\beta_3 f_{\text{match}} +
-\beta_4 f_{\text{novelty}} +
-\beta_5 f_{\text{edge}}
-\bigr).
-\]
+Each placed shape is fully described by:
 
-| Feature    | Interpretation                              |
-|------------|---------------------------------------------|
-| density    | attraction or repulsion from occupied regions |
-| symmetry   | completion of visible patterns              |
-| match      | category alignment with neighbors           |
-| novelty    | contrast against existing shapes            |
-| edge       | boundary or margin preferences              |
+$$s = (q,\, \ell,\, r,\, \phi,\, \epsilon)$$
+
+| Parameter | Meaning |
+|---|---|
+| $q \in \mathcal{Q}$ | categorical mark |
+| $\ell \in \mathcal{S}$ | centroid location |
+| $r \in \mathbb{R}_+$ | characteristic scale |
+| $\phi \in [0, 2\pi)$ | orientation angle |
+| $\epsilon$ | execution deviation from ideal form |
+
+Marks are not dimensionless labels. They occupy space and possess symmetry structure:
+
+- **Circles** $(\circ)$: continuous rotational symmetry, no preferred axis, isotropic overlap geometry
+- **Squares** $(\square)$: fourfold symmetry, strong alignment tendency along axis $\phi$
+- **Triangles** $(\triangle)$: single apex, directional asymmetry, bilateral symmetry about apex axis
+
+This **mark-induced anisotropy** enters the interaction energy: the spatial relationship between two squares is not equivalent to the spatial relationship between two circles at the same distance, because the marks themselves structure the geometry of interaction. Feature functions that measure alignment, containment, or overlap must respect this.
+
+---
+
+## Stigmergic Coordination
+
+This system exhibits a specific coordination structure: participants **never interact directly**. No participant observes another participant, communicates intent, or responds to agent behavior. Coordination is mediated entirely through the shared surface:
+
+$$\text{participant}_t \;\longrightarrow\; \text{reads } X_t \;\longrightarrow\; \text{produces action} \;\longrightarrow\; X_{t+1}$$
+
+This is **stigmergy** — indirect coordination through environmental modification — applied to human geometric production. The artifact is simultaneously:
+
+1. the **record** of all prior decisions
+2. the **stimulus** that structures the next decision
+3. the **medium** through which strangers implicitly coordinate
+
+Global spatial order emerges without communication, shared goals, or central authority. The artifact is not merely the output of the process — it is the mechanism of the process.
+
+This distinguishes the framework from models in which agents respond to each other directly (Schelling segregation), in which structure is transmitted through imitation (iterated learning), or in which patterns emerge from physical rather than behavioral deposition processes.
 
 ---
 
 ## Parameter Estimation
 
-Parameters \(\beta_i\) are estimated via **maximum pseudolikelihood** for spatial point processes:
+Given an observed action sequence $\{(q_t, \ell_t)\}_{t=1}^{n}$ with associated field states $\{X_{t-1}\}_{t=1}^{n}$, parameters are estimated by **maximum pseudolikelihood**:
 
-1. Record every action \(a_t\).
-2. Compute local spatial statistics at each step.
-3. Estimate coefficients \(\beta_i\).
-4. Compare candidate models using AIC, BIC, and WAIC.
+$$\hat{\boldsymbol{\beta}} \;=\; \underset{\boldsymbol{\beta}}{\arg\max}\; \sum_{t=1}^{n} \left[\log \lambda(q_t, \ell_t \mid X_{t-1};\, \boldsymbol{\beta}) \;-\; \log \mathcal{Z}(X_{t-1};\, \boldsymbol{\beta})\right]$$
 
-The model that best reproduces the observed trajectory identifies the most plausible behavioral rule.
+The partition function $\mathcal{Z}(X_{t-1}; \boldsymbol{\beta})$ is approximated by numerical integration over $\mathcal{Q} \times \mathcal{S}$ using a discretization grid on $\mathcal{S}$.
+
+Pseudolikelihood methods for spatial processes are established in Besag (1977) and fully developed in Baddeley, Rubak, and Turner (2015). Under mild regularity conditions, $\hat{\boldsymbol{\beta}}$ is consistent and asymptotically normal.
+
+### Model Selection
+
+Competing energy specifications are ranked by:
+
+$$\text{AIC} = 2K - 2\hat{\ell} \qquad \text{BIC} = K \log n - 2\hat{\ell} \qquad \text{WAIC}$$
+
+where $K$ is the number of free parameters and $\hat{\ell}$ is the maximized pseudolikelihood.
 
 ---
 
-## Monte Carlo Simulation
+## Candidate Generative Mechanisms
 
-Synthetic trajectories are generated via Monte Carlo:
+Specific hypotheses about participant behavior correspond to specific energy specifications:
 
-\[
-X_0 \rightarrow X_1 \rightarrow \dots \rightarrow X_n
-\]
+| Mechanism | Active Features | Sign | Predicted Field Structure |
+|---|---|---|---|
+| Complete Spatial Randomness | none | — | uniform, structureless |
+| Clustering | $f_{\text{density}}$ | $\beta < 0$ | aggregated groups |
+| Inhibition | $f_{\text{density}}$ | $\beta > 0$ | regular spacing |
+| Shape segregation | $f_{\text{match}}$ | $\beta < 0$ | same-type clusters |
+| Shape interleaving | $f_{\text{match}}$ | $\beta > 0$ | alternating types |
+| Symmetry completion | $f_{\text{symmetry}}$ | $\beta < 0$ | bilateral balance |
+| Space-filling | $f_{\text{void}}$ | $\beta < 0$ | even coverage |
+| Edge anchoring | $f_{\text{edge}}$ | $\beta < 0$ | boundary concentration |
+| Mixed | multiple | varied | composite spatial pattern |
 
-Simulated fields are statistically compared with empirical artifacts.
+The fitted model identifies which mechanism — or combination — governs collective behavior.
 
-| Model      | Mechanism                              |
-|------------|----------------------------------------|
-| Random     | independent uniform placement          |
-| Cluster    | attraction to existing shapes          |
-| Homophily  | shape-category matching                |
-| Symmetry   | balance / pattern completion           |
+---
 
-Simulation reveals which local mechanisms produce structures statistically indistinguishable from the observed collective field.
+## Simulation and Field Comparison
+
+Fitted parameters generate synthetic trajectories by sequential sampling from the estimated intensity:
+
+$$X_0 = \emptyset, \qquad (q_{t+1}, \ell_{t+1}) \;\sim\; \frac{\exp\!\bigl(-\mathcal{H}(q,\ell;\, X_t;\, \hat{\boldsymbol{\beta}})\bigr)}{\mathcal{Z}(X_t;\, \hat{\boldsymbol{\beta}})}$$
+
+Synthetic fields are compared to observed artifacts using spatial point process summary statistics:
+
+| Statistic | Definition | Measures |
+|---|---|---|
+| $K(r)$ | $\lambda^{-1}\,\mathbb{E}[\text{events within distance } r \text{ of a typical event}]$ | overall clustering/inhibition |
+| $g(r) = K'(r) / 2\pi r$ | pair correlation function | pairwise distance structure |
+| $G(r)$ | nearest-neighbor distance distribution | local proximity |
+| $M_{qq'}(r)$ | mark connection function | same-type co-occurrence by distance |
+| $\Sigma(X)$ | symmetry index | bilateral balance |
+| $\text{CV}(V)$ | coefficient of variation of Voronoi cell areas | spatial regularity |
+
+Discrepancy between observed and simulated statistics, averaged over replicated trajectories, constitutes the primary validation criterion. The model that minimizes this discrepancy across all statistics identifies the most plausible generative mechanism.
+
+---
+
+## Experimental Design
+
+### Progression of Inquiry
+
+The experimental grammar isolates behavioral components through a structured sequence of tasks:
+
+| Level | Task | Variable Isolated |
+|---|---|---|
+| 1 | Place a single shape | single-mark emission distribution |
+| 2 | Place two shapes of the same type | same-class spatial relation |
+| 3 | Place two shapes of different types | cross-class integration strategy |
+| 4 | Select from a shape bank and place once | categorical choice without motor production |
+| 5 | Sequential shared field — each participant adds one shape | collective transition kernel |
+
+Each level adds one latent variable to the inference problem. Progression from Level 1 to Level 5 builds toward the full estimation of $\lambda(q, \ell \mid X_t)$.
+
+### Minimum Viable Experiment
+
+**Materials:**
+- Shape bank: circle template, square template, triangle template
+- One shared surface, initially blank
+- Coordinate recording system (grid overlay, photograph, or tracking)
+
+**Instruction delivered to each participant:**
+> Choose one shape and place it anywhere on the surface.
+
+**Record per action $t$:**
+
+```
+t       : order index
+q_t     : shape selected ∈ {circle, square, triangle}
+ℓ_t     : (x, y) placement coordinate
+X_{t-1} : field state before action (photograph or coordinate snapshot)
+```
+
+**Proceed to estimation:**
+
+$$\hat{\boldsymbol{\beta}} = \underset{\boldsymbol{\beta}}{\arg\max}\; \sum_t \log P(q_t, \ell_t \mid X_{t-1};\, \boldsymbol{\beta})$$
+
+**Validate by simulation and field comparison.**
+
+### Identifiability Conditions
+
+Reliable kernel estimation requires:
+
+- **Sample size:** $n \geq 30$ actions per experimental instance
+- **Spatial coverage:** actions distributed across $\mathcal{S}$, not concentrated in one region
+- **Replications:** multiple independent instances for out-of-sample validation
+- **Field variation:** the field must evolve across observation indices for the Markov structure to be estimable
+
+---
+
+## Relationship to Prior Frameworks
+
+| Framework | Connection | Structural Distinction |
+|---|---|---|
+| **Schelling (1971, 1978)** | minimal local rules generate global spatial structure | Schelling models agent *relocation*; this framework models *artifact accretion* — agents do not move, they append |
+| **Besag (1974)** | Gibbs–Markov local conditional specification | Besag addresses abstract lattice systems; this framework addresses human behavioral decisions conditioned on a visible geometric field |
+| **Ripley (1988); Møller & Waagepetersen (2004); Baddeley, Rubak & Turner (2015)** | spatial point process inference machinery | Classical SPP addresses natural event patterns; this framework introduces a behavioral generative process where each event is a deliberate human choice |
+| **Kirby (2008)** | sequential human update systems producing emergent structure | Kirby studies symbolic transmission through imitation chains; this framework studies spatial geometric accumulation through sequential placement |
+| **Grassé (1959), stigmergy** | indirect environmental coordination | Stigmergy addresses physical substance deposition by social insects; this framework addresses human aesthetic–geometric decision-making mediated by a shared surface |
+
+The sharpest description of the system's position is:
+
+> **Prior work gives either** emergence from local rules **(Schelling), spatial statistical inference (Ripley, Møller–Waagepetersen, Baddeley), or sequential human behavioral experiments (Kirby). This framework unifies all three around a new empirical object: the sequential construction of a collective geometric artifact by uncoordinated strangers under minimal instructions, modeled as a Gibbs-distributed marked spatial point process with a Markov update rule.**
 
 ---
 
 ## Canonical Foundations
 
-This framework connects to several established research traditions.
-
-### Emergent collective behavior
-The principle that simple local rules generate large-scale spatial structure was demonstrated by **Thomas C. Schelling** in [*Dynamic Models of Segregation* (1971)](https://acoustique.ec-lyon.fr/chaos/Schelling71.pdf) and [*Micromotives and Macrobehavior* (1978)](https://openlibrary.org/books/OL4729113M/Micromotives_and_macrobehavior). 
-
-In Schelling’s model, individual agents follow minimal neighborhood preferences, yet global segregation patterns emerge (see [Schelling’s model of segregation on Wikipedia](https://en.wikipedia.org/wiki/Schelling%27s_model_of_segregation)). Sequential Shape Fields extends the same logic from residential segregation to **geometric artifacts**: local decision rules → sequential spatial updates → emergent collective structure.
-
-### Spatial statistics
-The shared-field representation is a **marked spatial point process**, a core model in spatial statistics.
-
-### Cultural evolution
-Sequential accumulation mirrors **iterated learning** models in cultural transmission.
-
-### Complex systems
-The framework also aligns with research on self-organization, collective intelligence, and decentralized decision systems.
+| Domain | Key Works | Role in Framework |
+|---|---|---|
+| Markov processes | Markov (1906); Feller (1968); Norris (1998) | temporal structure of sequential updates |
+| Spatial point processes | Cox & Isham (1980); Ripley (1988); Møller & Waagepetersen (2004); Baddeley, Rubak & Turner (2015) | marked spatial configuration modeling and inference |
+| Gibbs–Markov spatial interaction | Besag (1974, 1977); Cressie (1993) | local interaction energy specification |
+| Emergent spatial structure | Schelling (1971, 1978) | macro-from-micro conceptual template |
+| Sequential human accumulation | Kirby (2008); Boyd & Richerson (1985) | sequential social update dynamics |
+| Simulation-based inference | Metropolis et al. (1953); Robert & Casella (2004); Neal (2011) | trajectory simulation and parameter recovery |
+| Decentralized emergence | Epstein (2006); Page (2011) | complex systems framing |
 
 ---
 
-## Experimental Pipeline
+## Theoretical Summary
 
-1. **Data collection**  
-   For each participant record: shape category, coordinates, and order index.
+**Collective Geometric Inscription** is formally described as:
 
-2. **Model fitting**  
-   Estimate parameters of candidate transition kernels.
+$$\boxed{X_t = \{(q_i, \ell_i)\}_{i=1}^{t} \qquad (q_{t+1},\, \ell_{t+1}) \;\sim\; \frac{\exp\!\bigl(-\sum_k \beta_k f_k(q, \ell;\, X_t)\bigr)}{\mathcal{Z}(X_t)}}$$
 
-3. **Simulation**  
-   Generate synthetic trajectories under competing mechanisms.
+The object of inference is the energy decomposition $\{\beta_k, f_k\}$ that best accounts for the spatial structure of observed collective artifacts.
 
-4. **Model comparison**  
-   Identify the transition rule that best explains the observed collective field.
+Understanding this decomposition reveals the **implicit decision rule by which strangers — acting independently, without communication, under a single minimal instruction — collectively produce complex spatial structure through the accumulation of geometric marks on a shared surface.**
 
 ---
 
-## Conceptual Summary
+## Conceptual Hierarchy
 
-The experimental ladder proceeds as
-
-\[
-\text{single form} \to
-\text{same-form relation} \to
-\text{mixed relation} \to
-\text{categorical choice} \to
-\text{spatial placement} \to
-\text{collective sequential field} \to
-\text{transition kernel} \to
-\text{Monte Carlo inference}.
-\]
-
-Minimal instructions initiate the system. Sequential local decisions generate the collective artifact. The scientific goal is to recover the **kernel governing those decisions**.
-
----
-
-## Minimum Viable Experiment
-
-1. Prepare shape bank: circle, square, triangle.
-2. Instruction:  
-   > Choose one shape and add it anywhere on the paper.
-3. Each passerby adds exactly one shape.
-4. Record: shape type, coordinates, order index.
-5. Fit the transition model \(X_{t+1} \sim K(\cdot \mid X_t)\).
-6. Use Monte Carlo simulation to evaluate candidate mechanisms.
-
----
-
-## Core Research Goal
-
-Estimate the transition rule
-
-\[
-K((q,\ell) \mid X_t).
-\]
-
-This kernel reveals how strangers, under minimal instructions, collectively generate spatial structure. Understanding the rule illuminates how **simple local decisions produce complex collective artifacts**.
+```
+minimal instruction
+    ↓
+participant observes field X_t
+    ↓
+action (q_{t+1}, ℓ_{t+1}) drawn from λ(· | X_t)
+    ↓
+field updates: X_{t+1} = X_t ∪ {(q_{t+1}, ℓ_{t+1})}
+    ↓
+next participant observes X_{t+1}
+    ↓
+collective artifact X_n = emergent spatial structure
+    ↓
+inference: recover λ from {X_t} trajectory
+    ↓
+simulation: generate synthetic fields from λ̂
+    ↓
+validation: compare observed and simulated spatial statistics
+    ↓
+identification: which mechanism produced the structure?
+```
