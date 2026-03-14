@@ -19,6 +19,24 @@ Over time, the surface fills. Structure appears.
 
 The question is: **what rule produced it?**
 
+---
+
+## What Makes This Different
+
+Every existing approach in spatial and spatiotemporal point process modeling looks at events that have already occurred — crime locations, seismic activity, disease cases, ecological distributions — and asks: *what pattern is this?* The field is, at its foundation, descriptive forensics on outcomes.
+
+CGI inverts that objective entirely. The shapes on the surface are not events to be characterized. They are evidence of a reasoning process — something that happened inside a person's mind when they looked at the paper, read the existing configuration, and decided where to place a shape. The framework does not describe where things landed. It asks why a person put something there, and recovers that reason from the geometry left behind.
+
+Three structural features separate CGI from the current frontier.
+
+**The intensity function is a decision rule, not a rate.** In all existing marked point process literature, the conditional intensity $\lambda(q, \ell \mid X_t)$ quantifies how frequently events arise from a physical or social process. In CGI it quantifies the probability that a deliberate agent, reading the current field, chooses a specific shape and location. This is not a terminological distinction — it changes what the model is for, what counts as a good fit, and what the estimated parameters mean.
+
+**The artifact is simultaneously record, stimulus, and coordination medium.** The shared surface is the complete history of all prior decisions, the perceptual input that structures the next decision, and the only channel through which strangers implicitly coordinate — without speaking, without awareness of each other's existence. No existing spatial model treats a physical object as all three of those things at once, because no existing spatial model is about human agents coordinating through an artifact they are collectively constructing.
+
+**Marks carry intrinsic geometry.** Every existing marked point process treats the mark as a dimensionless label — a category, a type, a scalar. CGI treats the mark as a shape, and shapes have geometry that structurally changes how they relate to neighbors in space. A circle adjacent to a square is a geometrically different configuration than a square adjacent to a triangle. That difference enters the interaction energy. It is not currently modeled anywhere in the literature.
+
+---
+
 This framework models the evolving artifact as a **sequential marked spatial point process** and treats participant decisions as draws from a **field-conditioned probability measure**. The scientific objective is to recover the **conditional intensity function** that governs how participants select shape type and placement location given the configuration they observe.
 
 ---
@@ -308,6 +326,12 @@ Reliable kernel estimation requires:
 - **Spatial coverage:** actions distributed across $\mathcal{S}$, not concentrated in one region
 - **Replications:** multiple independent instances for out-of-sample validation
 - **Field variation:** the field must evolve across observation indices for the Markov structure to be estimable
+
+---
+
+## Position at the Research Frontier
+
+The existing literature on spatial and spatiotemporal point processes treats the conditional intensity function as a physical rate — a measure of how frequently events occur given prior history, calibrated against observational data from natural or social systems in which the generating agent is unobservable. Collective Geometric Inscription departs from this tradition at a foundational level: the conditional intensity $\lambda(q, \ell \mid X_t)$ is interpreted not as a rate but as a **decision rule** — the probability that a deliberate human agent, upon observing the current field configuration $X_t$, selects shape category $q$ and placement location $\ell$. This reinterpretation transforms the inferential objective. Rather than characterizing the statistical structure of an observed pattern post hoc, the framework targets the latent behavioral mechanism that generated it, and does so through a purpose-designed experimental pipeline in which actions, ordering, and field states are recorded with full observability. To our knowledge, no existing work in the marked spatial point process literature — including recent neural and Gibbs-process extensions — combines a behavioral causal interpretation of the intensity function with a controlled sequential experiment designed specifically to identify that function. The 2024–2025 frontier has expanded the expressive power of intensity models considerably; it has not addressed the problem of recovering an interpretable decision rule from a collective artifact produced by uncoordinated human agents. That is the problem this framework addresses.
 
 ---
 
