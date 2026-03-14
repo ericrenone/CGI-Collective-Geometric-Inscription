@@ -1,4 +1,4 @@
-# Collective Geometric Inscription
+# Collective Geometric Inscription - CGI
 ## A Marked Spatial Point Process Framework for Emergent Artifact Formation
 
 > Uncoordinated participants, acting under a single minimal instruction,  
